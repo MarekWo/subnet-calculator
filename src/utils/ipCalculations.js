@@ -1,12 +1,14 @@
 import { Address4 } from 'ip-address';
+import { validateIPAddress, validateCIDR } from './validation';
 
 export function calculateSubnet(ipAddress, cidr) {
   try {
-    const addr = new Address4(`${ipAddress}/${cidr}`);
-    
-    if (!addr.isValid()) {
+    // Walidacja adresu IP i maski podsieci
+    if (!validateIPAddress(ipAddress) || !validateCIDR(cidr)) {
       throw new Error('Nieprawidłowy adres IP lub maska podsieci');
     }
+    
+    const addr = new Address4(`${ipAddress}/${cidr}`);
     
     const networkAddress = addr.startAddress().address;
     const broadcastAddress = addr.endAddress().address;
